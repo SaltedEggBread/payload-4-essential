@@ -34,11 +34,11 @@ For Payload API details, read the skill that ships with Payload: `node_modules/p
 
 ## Branching And Release Rules
 
-- Never push directly to `master`.
+- Never push directly to `main`.
 - Push agent work to `staging` only.
-- A human is responsible for merging to `master`.
+- A human is responsible for merging to `main`.
 - If asked to publish work, prefer `staging` unless the human explicitly instructs otherwise.
-- Do not rewrite `master` history.
+- Do not rewrite `main` history.
 
 ## Testing Rules
 
@@ -93,7 +93,7 @@ For Payload API details, read the skill that ships with Payload: `node_modules/p
 - Keep the repo maintainable.
 - Keep the README honest.
 - Push to `staging`.
-- Let the human merge to `master`.
+- Let the human merge to `main`.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
