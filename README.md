@@ -28,10 +28,10 @@ It is the Payload 4 sibling of the [Payload 3 boilerplate](https://github.com/rp
 
 ## Version Info
 
-- **Payload CMS**: `4.0.0-beta.2` (all `@payloadcms/*` packages on the same version)
-- **Next.js**: `16.4.2`
+- **Payload CMS**: `4.0.0-beta.12` (all `@payloadcms/*` packages on the same version)
+- **Next.js**: `16.4.6`
 - **React**: `19.3.1`
-- **Node.js**: `>=24.15.0` (`.node-version` pins Node 24 for Railway)
+- **Node.js**: `^24.22.3 || >=26.13.1` (`.node-version` pins Node 24.22.3 for Railway)
 - **pnpm**: `10.26.0`
 - **TypeScript**: `6.0.3`
 - **Playwright**: `1.63.0`
@@ -125,7 +125,7 @@ Access tokens expire after one hour and are renewed with rotating refresh tokens
 ## Local Setup
 
 1. Clone or fork this repository. Or deploy on Railway first and then clone your new repository.
-2. Use Node.js 24 (`.node-version`), and enable pnpm through Corepack: `corepack enable`
+2. Use Node.js 24.22.3 or newer (`.node-version`), and enable pnpm through Corepack: `corepack enable`
 3. Copy `.env.example` to `.env`
 4. Start PostgreSQL: `docker compose up -d postgres`
 5. Install dependencies: `corepack pnpm install`
@@ -170,10 +170,24 @@ Make sure Docker is running, then:
 
 `test:e2e:manual` runs headed with a visible slowdown and pauses at the end of the happy path, so you can click around the admin and the public pages. Resume or stop the session from the Playwright inspector when you are done.
 
+### Against a deployed environment
+
+To test a real Railway deploy instead of the local Docker stack, point the suite at it:
+
+```sh
+PLAYWRIGHT_BASE_URL=https://<your-e2e-domain> corepack pnpm test:e2e
+```
+
+- The target must be a separate environment (for example a Railway `e2e` environment deploying from `staging`) with an **empty database**: the suite onboards the first admin, and seeding wipes all content. Recreate the environment before each run.
+- Never point it at production. The config refuses any host name containing `production`.
+- Steps 1 and 2 above are skipped; the deployed app runs its own migrations and uses its own bucket.
+
+Where Playwright ships no Chromium build (macOS 13, for example), add `PLAYWRIGHT_CHANNEL=chrome` to use an installed Google Chrome. This works for local runs too.
+
 ## Requirements
 
 - **Database**: PostgreSQL
-- **Node.js**: 24.15 or newer
+- **Node.js**: 24.22.3 or newer (or 26.13.1 or newer)
 - **Docker**: for local PostgreSQL, the optional MinIO bucket and the e2e suite
 
 ## Useful Resources

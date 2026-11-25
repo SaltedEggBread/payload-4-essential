@@ -82,6 +82,10 @@ export const mcpOAuthPlugin = definePlugin<MCPOAuthPluginOptions | undefined>({
     }
     // Bearer tokens from this server, or user API keys as before; anonymous requests get a 401
     mcp.options.overrideGetAuthorizedMCP ??= getAuthorizedMCPWithOAuth
+    // Since 4.0.0-beta.8 the MCP plugin runs its own OAuth server by default, under /api/mcp/oauth/*
+    // and /api/mcp/oauth-protected-resource. This plugin is the only authorization server: turn the
+    // built-in one off so clients cannot discover a second issuer whose tokens the override rejects.
+    mcp.options.oauth ??= false
     mcp.options.collections = {
       ...mcp.options.collections,
       'oauth-clients': { tools: noMCPTools },
