@@ -111,7 +111,7 @@ export default buildConfig({
   email,
   endpoints: [
     {
-      // Used by the Railway healthcheck (see railway.json)
+      // Used by the Railway healthcheck (see .railway/railway.ts)
       path: "/health",
       method: "get",
       handler: () => Response.json({ status: "ok" }),

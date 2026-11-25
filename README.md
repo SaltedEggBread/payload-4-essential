@@ -78,7 +78,9 @@ The template deploys the website, a PostgreSQL database and a Railway Bucket for
 1. Open `https://<your-domain>/admin` and create the first user. It becomes the admin.
 2. Click **Seed your database** on the dashboard for demo content (optional).
 
-Configuration happens in [railway.json](railway.json). `pnpm start` applies committed Payload migrations before starting Next.js. Migrations do not run during `pnpm build`, because Railway private networking is unavailable while the image builds.
+The service's Railway settings (build and start commands, health check, restart policy and the deploy branch for each environment) live in [.railway/railway.ts](.railway/railway.ts), Railway's Infrastructure as Code. Railway does not read that file during deploys: after editing it, run `npx @railway/cli config plan` and then `npx @railway/cli config apply` once per environment (production deploys `main`, other environments deploy `staging`). The file manages only the website service, so applying it never touches the database or the bucket.
+
+`pnpm start` applies committed Payload migrations before starting Next.js. Migrations do not run during `pnpm build`, because Railway private networking is unavailable while the image builds.
 
 ### Environment variables
 
