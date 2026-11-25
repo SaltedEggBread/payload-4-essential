@@ -170,6 +170,20 @@ Make sure Docker is running, then:
 
 `test:e2e:manual` runs headed with a visible slowdown and pauses at the end of the happy path, so you can click around the admin and the public pages. Resume or stop the session from the Playwright inspector when you are done.
 
+### Against a deployed environment
+
+To test a real Railway deploy instead of the local Docker stack, point the suite at it:
+
+```sh
+PLAYWRIGHT_BASE_URL=https://<your-e2e-domain> corepack pnpm test:e2e
+```
+
+- The target must be a separate environment (for example a Railway `e2e` environment deploying from `staging`) with an **empty database**: the suite onboards the first admin, and seeding wipes all content. Recreate the environment before each run.
+- Never point it at production. The config refuses any host name containing `production`.
+- Steps 1 and 2 above are skipped; the deployed app runs its own migrations and uses its own bucket.
+
+Where Playwright ships no Chromium build (macOS 13, for example), add `PLAYWRIGHT_CHANNEL=chrome` to use an installed Google Chrome. This works for local runs too.
+
 ## Requirements
 
 - **Database**: PostgreSQL
