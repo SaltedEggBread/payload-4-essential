@@ -28,10 +28,10 @@ It is the Payload 4 sibling of the [Payload 3 boilerplate](https://github.com/rp
 
 ## Version Info
 
-- **Payload CMS**: `4.0.0-beta.2` (all `@payloadcms/*` packages on the same version)
-- **Next.js**: `16.4.2`
+- **Payload CMS**: `4.0.0-beta.12` (all `@payloadcms/*` packages on the same version)
+- **Next.js**: `16.4.6`
 - **React**: `19.3.1`
-- **Node.js**: `>=24.15.0` (`.node-version` pins Node 24 for Railway)
+- **Node.js**: `^24.22.3 || >=26.13.1` (`.node-version` pins Node 24.22.3 for Railway)
 - **pnpm**: `10.26.0`
 - **TypeScript**: `6.0.3`
 - **Playwright**: `1.63.0`
@@ -125,7 +125,7 @@ Access tokens expire after one hour and are renewed with rotating refresh tokens
 ## Local Setup
 
 1. Clone or fork this repository. Or deploy on Railway first and then clone your new repository.
-2. Use Node.js 24 (`.node-version`), and enable pnpm through Corepack: `corepack enable`
+2. Use Node.js 24.22.3 or newer (`.node-version`), and enable pnpm through Corepack: `corepack enable`
 3. Copy `.env.example` to `.env`
 4. Start PostgreSQL: `docker compose up -d postgres`
 5. Install dependencies: `corepack pnpm install`
@@ -187,7 +187,7 @@ Where Playwright ships no Chromium build (macOS 13, for example), add `PLAYWRIGH
 ## Requirements
 
 - **Database**: PostgreSQL
-- **Node.js**: 24.15 or newer
+- **Node.js**: 24.22.3 or newer (or 26.13.1 or newer)
 - **Docker**: for local PostgreSQL, the optional MinIO bucket and the e2e suite
 
 ## Useful Resources
