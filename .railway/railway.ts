@@ -6,6 +6,9 @@ import { defineRailway, github, group, project, service } from 'railway/iac'
 //
 // This repository manages only the Payload-4 service. Postgres and the bucket stay
 // outside IaC, so applying this file can never delete them.
+//
+// Before the first `railway config apply`, replace the GitHub repository and the
+// Railway project name below with your own.
 export const partial = 'Payload-4'
 
 export default defineRailway((ctx) => {
@@ -13,7 +16,7 @@ export default defineRailway((ctx) => {
   const branch = ctx.environment === 'production' ? 'main' : 'staging'
 
   const payload = service('Payload-4', {
-    source: github('beepulp/payload-4-essential', { branch, checkSuites: false }),
+    source: github('your-github-user/your-repo', { branch, checkSuites: false }),
     build: { buildCommand: 'pnpm build', buildEnvironment: 'V3', builder: 'RAILPACK' },
     // `pnpm start` runs `payload migrate` before `next start`, so migrations run on every boot
     start: 'pnpm start',
@@ -25,7 +28,7 @@ export default defineRailway((ctx) => {
     networking: { privateNetworkEndpoint: 'payload-4' },
   })
 
-  return project('soothing-harmony', {
+  return project('your-railway-project', {
     variables: { managed: false },
     // Keep the service in its existing canvas group on the Railway dashboard
     resources: [group('Payload CMS 4 Website (Beta)', [payload])],

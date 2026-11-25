@@ -78,7 +78,7 @@ The template deploys the website, a PostgreSQL database and a Railway Bucket for
 1. Open `https://<your-domain>/admin` and create the first user. It becomes the admin.
 2. Click **Seed your database** on the dashboard for demo content (optional).
 
-The service's Railway settings (build and start commands, health check, restart policy and the deploy branch for each environment) live in [.railway/railway.ts](.railway/railway.ts), Railway's Infrastructure as Code. Railway does not read that file during deploys: after editing it, run `npx @railway/cli config plan` and then `npx @railway/cli config apply` once per environment (production deploys `main`, other environments deploy `staging`). The file manages only the website service, so applying it never touches the database or the bucket.
+The service's Railway settings (build and start commands, health check, restart policy and the deploy branch for each environment) live in [.railway/railway.ts](.railway/railway.ts), Railway's Infrastructure as Code. The file ships with placeholders: set your own GitHub repository and Railway project name before using it. Railway does not read that file during deploys: after editing it, run `npx @railway/cli config plan` and then `npx @railway/cli config apply` once per environment (production deploys `main`, other environments deploy `staging`). The file manages only the website service, so applying it never touches the database or the bucket.
 
 `pnpm start` applies committed Payload migrations before starting Next.js. Migrations do not run during `pnpm build`, because Railway private networking is unavailable while the image builds.
 
@@ -137,6 +137,24 @@ Uploads are stored on local disk by default. To use a bucket like production doe
 
 To run the production build locally: `corepack pnpm build && corepack pnpm start`
 
+### Building a private site from this template
+
+GitHub does not allow a private fork of a public repository. To keep your own frontend and design system private while still pulling in template updates:
+
+1. Create an empty **private** repository on GitHub.
+2. Clone this template, then turn it into a remote named `upstream` and point `origin` at your private repository:
+   ```sh
+   git clone https://github.com/SaltedEggBread/payload-4-essential.git my-site
+   cd my-site
+   git remote rename origin upstream
+   git remote add origin https://github.com/<you>/<your-private-repo>.git
+   git push -u origin main
+   ```
+3. Set your private repository and Railway project in `.railway/railway.ts`, and give the Railway GitHub app access to the private repository.
+4. To pick up template updates later: `git fetch upstream && git merge upstream/main`. Never push your site back to `upstream`.
+
+Keep in mind that the HTML, CSS and JavaScript your site sends to browsers are always visible to visitors. A private repository protects your source code, not the rendered result.
+
 ### Changing the schema
 
 In development, Payload pushes schema changes straight to your local database. Before you deploy, create a migration so production gets the same change:
@@ -191,6 +209,10 @@ Where Playwright ships no Chromium build (macOS 13, for example), add `PLAYWRIGH
 - **Database**: PostgreSQL
 - **Node.js**: 24.22.3 or newer (or 26.13.1 or newer)
 - **Docker**: for local PostgreSQL, the optional MinIO bucket and the e2e suite
+
+## License
+
+MIT. See [LICENSE](LICENSE).
 
 ## Useful Resources
 
